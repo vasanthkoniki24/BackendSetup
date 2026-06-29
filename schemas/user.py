@@ -1,31 +1,36 @@
-from datetime import datetime
+# schemas/user.py
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from datetime import datetime
+
+from pydantic import BaseModel, Field, ConfigDict
+
+from models.user import AccountType
 
 
 class UserResponse(BaseModel):
-    id: int
-    email: EmailStr
-    full_name: str
-    role: str
-    is_active: bool
-    is_verified: bool
-    created_at: datetime
+    """
+    Safe user representation.
+    Returned after login, token refresh, GET /users/me.
+    Never exposes password_hash.
+    """
+    model_config = ConfigDict(from_attributes=True)
 
-    model_config = {"from_attributes": True}
-
-
-class UserListResponse(BaseModel):
-    success: bool = True
-    total: int
-    users: list[UserResponse]
-
-
-class UserUpdateRequest(BaseModel):
-    full_name: Optional[str] = None
-    is_active: Optional[bool] = None
-
-
-class ChangePasswordRequest(BaseModel):
-    current_password: str
-    new_password: str
+    id: str = Field(..., description="User UUID")
+    full_name: str = Field(..., description="Full name")
+    email: str = Field(..., description="Email address")
+    account_type: AccountType = Field(
+        ...,
+        description="individual or organization",
+    )
+    is_active: bool = Field(
+        ...,
+        description="True if email OTP verified",
+    )
+    created_at: datetime = Field(
+        ...,
+        description="Account creation timestamp (UTC)",
+    )
+    updated_at: Optional[datetime] = Field(
+        default=None,
+        description="Last update timestamp (UTC)",
+    )
