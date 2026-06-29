@@ -9,8 +9,8 @@ from alembic import context
 from core.config import settings
 from core.database import Base
 
-# Import all models so Alembic detects them
-import models  # noqa: F401
+# Explicit model imports — required for autogenerate to detect all tables
+from models import user, tenant, otp_verification, refresh_token  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
@@ -34,7 +34,12 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection):
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,        # detects column type changes
+        compare_server_default=True,  # detects default value changes
+    )
     with context.begin_transaction():
         context.run_migrations()
 
