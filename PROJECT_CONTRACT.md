@@ -2,10 +2,6 @@
 # Version: 1.0
 # Stack: Python / FastAPI / PostgreSQL / SQLAlchemy Async / Pydantic v2
 # ─────────────────────────────────────────────────────────────────────────────
-# READ THIS ENTIRE FILE BEFORE WRITING A SINGLE LINE OF CODE
-# This is the single source of truth across all Claude accounts
-# ─────────────────────────────────────────────────────────────────────────────
-
 ---
 
 ## 1. CURRENT MODULE SCOPE
@@ -303,40 +299,8 @@ POST /auth/refresh-token
 
 ---
 
-## 13. SESSION OPENING TEMPLATE
 
-Paste this at the top of EVERY new Claude account session:
-
-```
-## SESSION CONTEXT — AI SaaS Backend (Auth Module)
-
-Stack: Python / FastAPI / PostgreSQL / SQLAlchemy Async / Pydantic v2
-
-## MY TASK THIS SESSION
-[describe your specific task]
-
-## WHAT IS BUILT — DO NOT REBUILD
-core/: config, database, exceptions, security, cookies, email,
-       dependencies, logging_config
-models/: user, tenant, otp_verification, refresh_token
-schemas/: auth, response, user
-services/: auth_service, otp_service, token_service
-routes/: auth (9 endpoints), users (GET /me only)
-main.py: active
-
-## RULES
-- Read PROJECT_CONTRACT.md section 4-12 before writing any code
-- Use exact field names from section 4
-- Use exact function signatures from sections 6-10
-- Never use raw HTTPException
-- db.flush() not db.commit()
-- routes/__init__.py must stay empty
-- Never accept email from frontend in verify-otp or reset-password
-```
-
----
-
-## 14. GIT BRANCH STRATEGY
+## 13. GIT BRANCH STRATEGY
 
 ```
 main
